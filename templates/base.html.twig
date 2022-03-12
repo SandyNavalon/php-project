@@ -18,6 +18,12 @@
 
         <h1>Hola {{name}}</h1>
 
+        <div class="navbar-nav">
+            <a class="nav-link active" href="#"><span class="sr-only">Home</span></a>
+            <a class="nav-link" href="{{ path('comic-list') }}">comics</a>
+            <a class="nav-link" href="{{ path('new-comic')}}">add comic</a>
+        </div>
+
         {% endblock %}
 
     </body>

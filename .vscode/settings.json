@@ -28,7 +28,7 @@
             "server": "localhost",
             "port": 8002,
             "driver": "MySQL",
-            "name": "comic-server",
+            "name": "my-server",
             "database": "demo",
             "username": "user",
             "password": "pass"

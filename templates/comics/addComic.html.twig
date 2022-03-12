@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% for message in app.flashes('success') %}
+        <p>{{message}}</p>
+
+    {% endfor %}
+
+    {{ form_start(comicForm) }}
+        {{ form_widget(comicForm) }}
+        <button type="submit">Add</button>
+    {{ form_end(comicForm) }}
+
+{% endblock %}
