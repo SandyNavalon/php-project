@@ -18,5 +18,20 @@
         "titleBar.inactiveBackground": "#86c60e99",
         "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "#86c60e"
+    "peacock.color": "#86c60e",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 8002,
+            "driver": "MySQL",
+            "name": "comic-server",
+            "database": "demo",
+            "username": "user",
+            "password": "pass"
+        }
+    ]
 }

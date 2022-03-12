@@ -12,12 +12,11 @@ services:
             - MYSQL_PASSWORD=pass
         ports:
             - "8002:3306"
-
     webserver:
         image: nginx:alpine
         working_dir: /application
         volumes:
-            - ./app:/application
+            - .:/application
             - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
         ports:
             - "8000:80"
@@ -30,5 +29,5 @@ services:
                 uid: 197609
         working_dir: /application
         volumes:
-            - ./appdocker:/application:cached
+            - .:/application:cached
             - ./phpdocker/php-fpm/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
