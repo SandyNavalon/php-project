@@ -17,6 +17,11 @@ framework:
     php_errors:
         log: true
 
+    assets:
+        packages:
+            comic:
+                base_path: 'images'
+
 when@test:
     framework:
         test: true

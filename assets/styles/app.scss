@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Hubballi&display=swap');
+
+body {
+    background-color: #FAF8FF;
+    font-family: 'Hubballi', cursiva;
+}
+
+.header{
+    margin-top: 20px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+
+    font-weight: 700;
+    font-size: 20px;
+
+    &__mess{
+        display: flex;
+        flex-direction: row;
+        margin-rigth: 10px;
+
+        img{
+            width: 25px;
+            margin-right: 5px;
+        }
+    }
+
+    &__login{
+        margin-left: 10px;
+    }
+
+}
+
+.navbar{
+
+    margin-top: 20px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    font-weight: 700;
+    font-size: 20px;
+
+    &__link{
+        color: black;
+        text-decoration: none;
+
+        margin:15px;
+
+    }
+
+}
+
+.comic-list{
+    margin: 40px;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+
+    .card-img{
+        width: 250px;
+        border: 1px solid black;
+    }
+
+    .price{
+        width: 20px;
+    }
+}

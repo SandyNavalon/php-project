@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ComicsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ComicsRepository::class)]
@@ -28,8 +30,13 @@ class Comics
     #[ORM\Column(type: 'integer', nullable: true)]
     private $price;
 
-    #[ORM\Column(type: 'string', length: 50)]
+    #[ORM\OneToOne(targetEntity: Status::class, mappedBy:'comic')]
     private $status;
+
+    public function __construct()
+    {
+        $this->status = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,14 +103,22 @@ class Comics
         return $this;
     }
 
-    public function getStatus(): ?string
+    /**
+    *@return Collection<int, Status>
+    */
+
+    public function getStatus(): Collection
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function addStatus(Status $status): self
     {
-        $this->status = $status;
+
+        if (!$this->status->contains($status)) {
+            $this->status[] = $status;
+            $status->addComic($this);
+        }
 
         return $this;
     }

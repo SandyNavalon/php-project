@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Comics </h2>
-    <div class="row row-cols-1 row-cols-md-2">
+{% block navbar %}
+    {% include "comics/navBar.html.twig" %}
+{% endblock %}
+
+    <div class="comic-list">
         {% for comic in comics %}
-            <div class="col mb-4">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{comic.image}}" class="card-img-top">
-                    <div class="card-body">
-                        <h2 class="card-title">{{comic.title}}</h2>
-                        <p class="card-text">{{comic.author}}</p>
-                        <p class="card-text">{{comic.price}}</p>
-                        {# <a href="{{ path('showPokemon', {'id': comic.id}) }}" class="btn btn-primary">Más Info</a> #}
+                <div class="comic-list__card" style="width: 18rem;">
+                    <img src="{{comic.image}}" class="card-img">
+
+                    <div class="comic-list__card-body">
+                        <h2 class="comic-list__card-title">{{comic.title}}</h2>
+                        <p class="comic-list__card-text">{{comic.author}}</p>
+                        <p class="comic-list__card-text"><img class= "price" src="{{ asset('price.png', 'comic') }}"> {{comic.price}}</p>
+                        <a href="{{ path('comicDetails', {'id': comic.id}) }}" class="btn btn-primary">Show more</a>
                     </div>
                 </div>
-            </div>
         {% endfor %}
     </div>
 {% endblock %}

@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Comics;
+use App\Entity\Status;
 use App\Form\ComicForm;
+use App\Manager\ComicManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,13 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
-    #[Route('/')]
+    #[Route('/', name:'home')]
     public function principalRoute()
     {
         return $this->render
         (
             'base.html.twig',
-        [ 'name' => 'SANDRA']
 
         );
     }
@@ -47,12 +48,32 @@ class MainController extends AbstractController
 
         return $this->render('comics/comicList.html.twig', ["comics"=>$comics]);
 
-
     }
 
+
     #[Route ('/comics/add', name:'new-comic')]
-    public function addComic(Request $request, EntityManagerInterface $doctrine)
+    public function addComic(Request $request, EntityManagerInterface $doctrine, ComicManager $manager)
     {
+
+        $status = new Status();
+        $status ->setName('Nuevo');
+
+        $status2 = new Status();
+        $status2 ->setName('Usado, en buen estado');
+
+        $status3 = new Status();
+        $status3 ->setName('Usado, tiene algunos desperfectos');
+
+        $status4 = new Status();
+        $status4 ->setName('Muy usado');
+
+
+        $doctrine->persist($status);
+        $doctrine->persist($status2);
+        $doctrine->persist($status3);
+        $doctrine->persist($status4);
+
+
         $form = $this->createForm(ComicForm::class);
         $form-> handleRequest($request);
 
@@ -60,16 +81,28 @@ class MainController extends AbstractController
         {
             $comic = $form->getData();
 
-            $doctrine->persist($comic);
+            $comicImage = $form->get('image')->getData();
+            if($comicImage) {
+                $comicImageName = $manager->uploadImage($comicImage, $this-> getParameter('kernel.project_dir').'/public/images');
+                $comic->setImage('/images/$comicImageName');
+            }
 
-            $doctrine->flush();
+            $doctrine->persist($comic);
 
             $this->addFlash('success', 'Comic added correctly');
             return $this->redirectToRoute('/comics', ['id'=> $comic->getId()]);
         }
-
         return $this->renderForm('comics/addComic.html.twig', ['comicForm' => $form]);
 
+        $doctrine->flush();
     }
 
+    #[Route('comics/{id}', name:'comicDetails')]
+    public function comicDetails($id, EntityManagerInterface $doctrine)
+    {
+        $repo = $doctrine->getRepository(Comics::class);
+        $comics = $repo->find($id);
+
+        return $this->render('comics/comicDetails.html.twig', ['comic'=>$comics]);
+    }
 }

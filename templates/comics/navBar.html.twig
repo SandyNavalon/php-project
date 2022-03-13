@@ -1,0 +1,17 @@
+{# {% extends 'base.html.twig' %} #}
+
+        <div class="header">
+            <div class="header__mess">
+                <img src="{{ asset('comic (1).png', 'comic') }}">
+                <a>Mensajes</a>
+            </div>
+            <div class="header__login">
+                <a class="login" href="{{ path('app_login')}}">LOG IN</a>
+            </div>
+        </div>
+
+        <div class="navbar">
+            <a class="navbar__link" href="{{ path('home') }}">¿Cómo funciona?</a>
+            <a class="navbar__link" href="{{ path('comic-list') }}">Comprar</a>
+            <a class="navbar__link" href="{{ path('new-comic')}}">Vender</a>
+        </div>

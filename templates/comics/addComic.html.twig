@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
+{# {% include "navBar.html.twig" %} #}
 
 {% block body %}
+
+{% block navbar %}
+    {% include "comics/navBar.html.twig" %}
+{% endblock %}
 
     {% for message in app.flashes('success') %}
         <p>{{message}}</p>
