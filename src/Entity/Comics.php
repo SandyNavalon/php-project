@@ -30,13 +30,21 @@ class Comics
     #[ORM\Column(type: 'integer', nullable: true)]
     private $price;
 
-    #[ORM\OneToOne(targetEntity: Status::class, mappedBy:'comic')]
-    private $status;
+    #[ORM\ManyToMany(targetEntity: ConditionComic::class, mappedBy: 'comicRelation')]
+    private $conditionComics;
 
     public function __construct()
     {
-        $this->status = new ArrayCollection();
+        $this->conditionComics = new ArrayCollection(['New', 'Alomst new, little damage', 'Used but readable' ]);
     }
+
+    // #[ORM\OneToOne(targetEntity: Status::class, mappedBy:'comic')]
+    // private $status;
+
+    // public function __construct()
+    // {
+    //     $this->status = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -103,21 +111,48 @@ class Comics
         return $this;
     }
 
-    /**
-    *@return Collection<int, Status>
-    */
+    // /**
+    // *@return Collection<int, Status>
+    // */
 
-    public function getStatus(): Collection
+    // public function getStatus(): Collection
+    // {
+    //     return $this->status;
+    // }
+
+    // public function addStatus(Status $status): self
+    // {
+
+    //     if (!$this->status->contains($status)) {
+    //         $this->status[] = $status;
+    //         $status->addComic($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * @return Collection<int, ConditionComic>
+     */
+    public function getConditionComics(): Collection
     {
-        return $this->status;
+        return $this->conditionComics;
     }
 
-    public function addStatus(Status $status): self
+    public function addConditionComic(ConditionComic $conditionComic): self
     {
+        if (!$this->conditionComics->contains($conditionComic)) {
+            $this->conditionComics[] = $conditionComic;
+            $conditionComic->addComicRelation($this);
+        }
 
-        if (!$this->status->contains($status)) {
-            $this->status[] = $status;
-            $status->addComic($this);
+        return $this;
+    }
+
+    public function removeConditionComic(ConditionComic $conditionComic): self
+    {
+        if ($this->conditionComics->removeElement($conditionComic)) {
+            $conditionComic->removeComicRelation($this);
         }
 
         return $this;

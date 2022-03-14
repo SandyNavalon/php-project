@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Comics </h2>
-    <div class="row row-cols-1 row-cols-md-2">
-            <div class="col mb-4">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{comic.image}}" class="card-img-top">
-                    <div class="card-body">
-                        <h2 class="card-title">{{comic.title}}</h2>
-                        <p class="card-text">{{comic.description}}</p>
-                        <p class="card-text">{{comic.author}}</p>
-                        <p class="card-text">{{comic.status}}</p>
-                        <p class="card-text">{{comic.price}}</p>
-                        {# <a href="{{ path('showPokemon', {'id': comic.id}) }}" class="btn btn-primary">Más Info</a> #}
-                    </div>
-                </div>
-            </div>
+{% block navbar %}
+    {% include "comics/navBar.html.twig" %}
+{% endblock %}
+
+    <div class="details-card">
+        <div class="details-card__main">
+            <h2 class="details-card__title">{{comic.title}}</h2>
+            <img src="{{comic.image}}" class="details-card__content-img">
+        </div>
+        <div class="details-card__content">
+            <p class="details-card__content-description">{{comic.description}}</p>
+            <p class="details-card__content-author">{{comic.author}}</p>
+            {# <p class="card-text">{{comic.conditionComics}}</p> #}
+            <p class="details-card__content-price"><img class= "price" src="{{ asset('price.png', 'comic') }}">{{comic.price}}</p>
+            <button class="details-card__content-btn">Send a message to seller</button>
+        </div>
     </div>
+
 {% endblock %}

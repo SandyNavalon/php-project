@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Comics;
-use App\Entity\Status;
+use App\Entity\ConditionComic;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -20,11 +20,11 @@ class ComicForm extends AbstractType
             ->add('author')
             ->add('image', FileType::class, ['mapped' => false])
             ->add('price')
-            ->add('status', EntityType::class, [
-                'class' => Status::class,
-                'choice_label' => 'name',
+            ->add('conditionComics', EntityType::class, [
+                'class' => ConditionComic::class,
+                'choice_label' => 'conditionName',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => false
             ]);
         }
 

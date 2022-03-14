@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comics;
+use App\Entity\ConditionComic;
 use App\Entity\Status;
 use App\Form\ComicForm;
 use App\Manager\ComicManager;
@@ -24,22 +25,6 @@ class MainController extends AbstractController
         );
     }
 
-    // #[Route('/insert')]
-    // public function insertNew(EntityManagerInterface $doctrine)
-    // {
-    //     $comic = new Comic();
-    //     $comic->setTitle('From Hell');
-    //     $comic->setDescription('Jack ha vuelto. Y, esta vez, la sangre es roja.
-    //     Cinco asesinatos sin resolver. Dos grandes maestros de la historia del cómic. Una conspiración intrincada, una metrópolis al borde del siglo XX y un destripador sangriento que sumerge a Londres en la era del horror contemporáneo.');
-    //     $comic->setAuthor('Alan Moore, Eddie Campbell');
-
-    //     //save into DB
-    //     $doctrine->persist($comic);
-    //     $doctrine->flush();
-
-    //     return new Response('Saved comic');
-    // }
-
     #[Route ('/comics', name:'comic-list')]
     public function comicList(EntityManagerInterface $doctrine)
     {
@@ -50,29 +35,41 @@ class MainController extends AbstractController
 
     }
 
-
-    #[Route ('/comics/add', name:'new-comic')]
-    public function addComic(Request $request, EntityManagerInterface $doctrine, ComicManager $manager)
+    #[Route('/insert')]
+    public function insertNew(EntityManagerInterface $doctrine)
     {
+        $status = new ConditionComic();
+        $status ->setConditionName('New');
 
-        $status = new Status();
-        $status ->setName('Nuevo');
+        $status2 = new ConditionComic();
+        $status2 ->setConditionName('Almost new, little damage');
 
-        $status2 = new Status();
-        $status2 ->setName('Usado, en buen estado');
-
-        $status3 = new Status();
-        $status3 ->setName('Usado, tiene algunos desperfectos');
-
-        $status4 = new Status();
-        $status4 ->setName('Muy usado');
+        $status3 = new ConditionComic();
+        $status3 ->setConditionName('Used but readable');
 
 
         $doctrine->persist($status);
         $doctrine->persist($status2);
         $doctrine->persist($status3);
-        $doctrine->persist($status4);
 
+
+        // $comic = new Comics();
+        // $comic->setTitle('From Hell');
+        // $comic->setDescription('Jack ha vuelto. Y, esta vez, la sangre es roja.
+        // Cinco asesinatos sin resolver. Dos grandes maestros de la historia del cómic. Una conspiración intrincada, una metrópolis al borde del siglo XX y un destripador sangriento que sumerge a Londres en la era del horror contemporáneo.');
+        // $comic->setAuthor('Alan Moore, Eddie Campbell');
+        // $comic->addConditionComic($status2);
+
+        //save into DB
+        // $doctrine->persist($comic);
+        $doctrine->flush();
+
+        return new Response('Saved comic');
+    }
+
+    #[Route ('/comics/add', name:'new-comic')]
+    public function addComic(Request $request, EntityManagerInterface $doctrine, ComicManager $manager)
+    {
 
         $form = $this->createForm(ComicForm::class);
         $form-> handleRequest($request);
@@ -84,17 +81,17 @@ class MainController extends AbstractController
             $comicImage = $form->get('image')->getData();
             if($comicImage) {
                 $comicImageName = $manager->uploadImage($comicImage, $this-> getParameter('kernel.project_dir').'/public/images');
-                $comic->setImage('/images/$comicImageName');
+                $comic->setImage("/images/$comicImageName");
             }
 
             $doctrine->persist($comic);
+            $doctrine->flush();
 
             $this->addFlash('success', 'Comic added correctly');
-            return $this->redirectToRoute('/comics', ['id'=> $comic->getId()]);
+            return $this->redirectToRoute('comic-list', ['id'=> $comic->getId()]);
         }
         return $this->renderForm('comics/addComic.html.twig', ['comicForm' => $form]);
 
-        $doctrine->flush();
     }
 
     #[Route('comics/{id}', name:'comicDetails')]
@@ -105,4 +102,22 @@ class MainController extends AbstractController
 
         return $this->render('comics/comicDetails.html.twig', ['comic'=>$comics]);
     }
+
+    #[Route('/comics/delete/{id}', name:'deleteComic')]
+    public function deleteComic($id, EntityManagerInterface $doctrine)
+    {
+        $user = $this->getUser();
+
+        $repo = $doctrine->getRepository(Comics::class);
+        $comic = $repo->find($id);
+
+        $doctrine->remove($comic);
+        $doctrine->flush();
+
+        return $this->redirectToRoute("comic-list");
+    }
+
+
+
+
 }
